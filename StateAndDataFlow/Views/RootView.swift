@@ -9,9 +9,10 @@ import SwiftUI
 
 struct RootView: View {
     @EnvironmentObject private var loginViewVM: LoginViewViewModel
-    
+    @AppStorage("isLoggedIn") var isLoggedIn: Bool = false
+
     var body: some View {
-        if loginViewVM.user.isLoggedIn {
+        if isLoggedIn {
             ContentView()
         } else {
             LoginView()

@@ -11,9 +11,11 @@ struct ContentView: View {
     @State private var contentViewVM = ContentViewViewModel()
     @EnvironmentObject private var loginViewVM: LoginViewViewModel
     
+    @State private var storageManager = StorageManager.shared
+
     var body: some View {
         VStack {
-            Text("Hi, \(loginViewVM.user.name)!")
+            Text("Hi, \(storageManager.userName)!")
                 .padding(.top, 100)
                 .font(.largeTitle)
             Text(contentViewVM.counter.formatted())
@@ -26,7 +28,7 @@ struct ContentView: View {
             
             Spacer()
             
-            Button(action: {}) {
+            Button(action: storageManager.deleteUser) {
                 TextButton(title: "LogOut")
             }
             .setupButtonStyle(color: .blue)

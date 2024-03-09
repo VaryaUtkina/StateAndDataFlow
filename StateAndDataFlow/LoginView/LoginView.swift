@@ -10,6 +10,8 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject private var loginViewVM: LoginViewViewModel
     
+    private var storageManager = StorageManager.shared
+    
     var body: some View {
         VStack {
             HStack {
@@ -22,7 +24,7 @@ struct LoginView: View {
                     .foregroundColor(
                         loginViewVM.user.name.count < 3 ? .red : .green
                     )
-
+                
             }
             .padding()
             
@@ -35,11 +37,11 @@ struct LoginView: View {
     
     private func login() {
         if loginViewVM.user.name.count > 2 {
-            loginViewVM.user.isLoggedIn.toggle()
+            storageManager.saveUser(name: loginViewVM.user.name)
         }
     }
 }
-
+    
 #Preview {
     LoginView()
         .environmentObject(LoginViewViewModel())
