@@ -11,7 +11,7 @@ struct ContentView: View {
     @State private var contentViewVM = ContentViewViewModel()
     @EnvironmentObject private var loginViewVM: LoginViewViewModel
     
-    @State private var storageManager = StorageManager.shared
+    private var storageManager = StorageManager.shared
 
     var body: some View {
         VStack {
@@ -28,11 +28,15 @@ struct ContentView: View {
             
             Spacer()
             
-            Button(action: storageManager.deleteUser) {
+            Button(action: logOut) {
                 TextButton(title: "LogOut")
             }
             .setupButtonStyle(color: .blue)
         }
+    }
+    private func logOut() {
+        storageManager.deleteUser()
+        loginViewVM.user = User(name: "", isLoggedIn: false)
     }
 }
 

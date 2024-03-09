@@ -9,7 +9,7 @@ import SwiftUI
 
 final class StorageManager {
     static let shared = StorageManager()
-    
+
     @AppStorage("userName") var userName = ""
     @AppStorage("isLoggedIn") var isLoggedIn = false
     
