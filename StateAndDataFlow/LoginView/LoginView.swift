@@ -15,12 +15,12 @@ struct LoginView: View {
             HStack {
                 Spacer()
                     .frame(width: 40)
-                TextField("Enter your name", text: $loginViewVM.name)
+                TextField("Enter your name", text: $loginViewVM.user.name)
                     .multilineTextAlignment(.center)
                 Text(loginViewVM.symbolsCount)
                     .frame(width: 40)
                     .foregroundColor(
-                        loginViewVM.name.count < 3 ? .red : .green
+                        loginViewVM.user.name.count < 3 ? .red : .green
                     )
 
             }
@@ -29,13 +29,13 @@ struct LoginView: View {
             Button(action: login) {
                 Label("OK", systemImage: "checkmark.circle")
             }
-            .disabled(loginViewVM.name.count <= 2)
+            .disabled(loginViewVM.user.name.count <= 2)
         }
     }
     
     private func login() {
-        if loginViewVM.name.count > 2 {
-            loginViewVM.isLoggedIn.toggle()
+        if loginViewVM.user.name.count > 2 {
+            loginViewVM.user.isLoggedIn.toggle()
         }
     }
 }

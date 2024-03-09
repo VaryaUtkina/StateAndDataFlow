@@ -9,10 +9,9 @@ import Foundation
 import Combine
 
 final class LoginViewViewModel: ObservableObject {
-    @Published var name = ""
-    @Published var isLoggedIn = false
+    @Published var user = User(name: "", isLoggedIn: false)
     
     var symbolsCount: String {
-            name.isEmpty ? "" : "\(name.count)"
+        user.name.isEmpty ? "" : "\(user.name.count)"
         }
 }

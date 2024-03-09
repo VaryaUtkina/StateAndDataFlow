@@ -13,7 +13,7 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            Text("Hi, \(loginViewVM.name)!")
+            Text("Hi, \(loginViewVM.user.name)!")
                 .padding(.top, 100)
                 .font(.largeTitle)
             Text(contentViewVM.counter.formatted())
@@ -22,9 +22,14 @@ struct ContentView: View {
             
             Spacer()
             
-            ButtonView(contentViewVM: contentViewVM)
+            StartButtonView(contentViewVM: contentViewVM)
             
             Spacer()
+            
+            Button(action: {}) {
+                TextButton(title: "LogOut")
+            }
+            .setupButtonStyle(color: .blue)
         }
     }
 }
@@ -34,22 +39,44 @@ struct ContentView: View {
         .environmentObject(LoginViewViewModel())
 }
 
-struct ButtonView: View {
+struct StartButtonView: View {
     @Bindable var contentViewVM: ContentViewViewModel
     
     var body: some View {
         Button(action: contentViewVM.startTimer) {
-            Text(contentViewVM.buttonTitle)
-                .font(.title)
-                .fontWeight(.bold)
-                .foregroundStyle(.white)
+            TextButton(title: contentViewVM.buttonTitle)
         }
-        .frame(width: 200, height: 60)
-        .background(.red)
-        .clipShape(.rect(cornerRadius: 20))
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(.black, lineWidth: 4)
-        )
+        .setupButtonStyle(color: .red)
+    }
+}
+
+struct TextButton: View {
+    let title: String
+    
+    var body: some View {
+        Text(title)
+            .font(.title)
+            .fontWeight(.bold)
+            .foregroundStyle(.white)
+    }
+}
+
+struct ButtonViewModifier: ViewModifier {
+let color: Color
+    func body(content: Content) -> some View {
+        content
+            .frame(width: 200, height: 60)
+            .background(color)
+            .clipShape(.rect(cornerRadius: 20))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(.black, lineWidth: 4)
+            )
+    }
+}
+
+extension Button {
+    func setupButtonStyle(color: Color) -> some View {
+        modifier(ButtonViewModifier(color: color))
     }
 }
