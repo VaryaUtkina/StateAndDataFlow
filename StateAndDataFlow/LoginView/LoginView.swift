@@ -24,7 +24,6 @@ struct LoginView: View {
                     .foregroundColor(
                         loginViewVM.user.name.count < 3 ? .red : .green
                     )
-                
             }
             .padding()
             
