@@ -10,38 +10,40 @@ import SwiftUI
 struct LoginView: View {
     @EnvironmentObject private var loginViewVM: LoginViewViewModel
     
-    private var storageManager = StorageManager.shared
-    
     var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                    .frame(width: 40)
-                TextField("Enter your name", text: $loginViewVM.user.name)
-                    .multilineTextAlignment(.center)
-                Text(loginViewVM.symbolsCount)
-                    .frame(width: 40)
-                    .foregroundColor(
-                        loginViewVM.user.name.count < 3 ? .red : .green
-                    )
-            }
-            .padding()
-            
-            Button(action: login) {
+            TextFieldView(loginViewVM: loginViewVM)
+            Button(action: loginViewVM.login) {
                 Label("OK", systemImage: "checkmark.circle")
             }
-            .disabled(loginViewVM.user.name.count <= 2)
+            .disabled(!loginViewVM.nameIsValid)
         }
-    }
-    
-    private func login() {
-        if loginViewVM.user.name.count > 2 {
-            storageManager.saveUser(name: loginViewVM.user.name)
-        }
+        .padding()
     }
 }
     
-#Preview {
-    LoginView()
-        .environmentObject(LoginViewViewModel())
+struct TextFieldView: View {
+    @ObservedObject var loginViewVM: LoginViewViewModel
+    
+    var body: some View {
+        ZStack {
+            TextField("Type your name...", text: $loginViewVM.user.name)
+                .multilineTextAlignment(.center)
+            HStack {
+                Spacer()
+                Text(loginViewVM.userNameCharCount)
+                    .font(.callout)
+                    .foregroundStyle(loginViewVM.nameIsValid ? .green : .red)
+                    .padding([.top, .trailing])
+            }
+            .padding(.bottom)
+        }
+    }
+}
+
+struct Register_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
+            .environmentObject(LoginViewViewModel())
+    }
 }

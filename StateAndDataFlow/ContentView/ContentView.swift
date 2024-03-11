@@ -8,81 +8,47 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var contentViewVM = ContentViewViewModel()
     @EnvironmentObject private var loginViewVM: LoginViewViewModel
+    
+    private let contentViewVM = ContentViewViewModel()
     
     private var storageManager = StorageManager.shared
 
     var body: some View {
         VStack {
-            Text("Hi, \(storageManager.userName)!")
-                .padding(.top, 100)
+            Text("Hi, \(loginViewVM.user.name)!")
                 .font(.largeTitle)
+                .offset(x: 0, y: 100)
             Text(contentViewVM.counter.formatted())
                 .font(.largeTitle)
-                .padding(.top, 100)
+                .offset(x: 0, y: 200)
             
             Spacer()
             
-            StartButtonView(contentViewVM: contentViewVM)
-            
-            Spacer()
-            
-            Button(action: logOut) {
-                TextButton(title: "LogOut")
+            VStack {
+                Spacer()
+                
+                ButtonView(
+                    title: contentViewVM.buttonTitle,
+                    color: .red,
+                    action: contentViewVM.startTimer
+                )
+                
+                Spacer()
+
+                ButtonView(
+                    title: "LogOut",
+                    color: .blue,
+                    action: loginViewVM.logout
+                )
             }
-            .setupButtonStyle(color: .blue)
         }
     }
-    private func logOut() {
-        storageManager.deleteUser()
-        loginViewVM.user = User(name: "", isLoggedIn: false)
-    }
 }
 
-#Preview {
-    ContentView()
-        .environmentObject(LoginViewViewModel())
-}
-
-struct StartButtonView: View {
-    @Bindable var contentViewVM: ContentViewViewModel
-    
-    var body: some View {
-        Button(action: contentViewVM.startTimer) {
-            TextButton(title: contentViewVM.buttonTitle)
-        }
-        .setupButtonStyle(color: .red)
-    }
-}
-
-struct TextButton: View {
-    let title: String
-    
-    var body: some View {
-        Text(title)
-            .font(.title)
-            .fontWeight(.bold)
-            .foregroundStyle(.white)
-    }
-}
-
-struct ButtonViewModifier: ViewModifier {
-let color: Color
-    func body(content: Content) -> some View {
-        content
-            .frame(width: 200, height: 60)
-            .background(color)
-            .clipShape(.rect(cornerRadius: 20))
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(.black, lineWidth: 4)
-            )
-    }
-}
-
-extension Button {
-    func setupButtonStyle(color: Color) -> some View {
-        modifier(ButtonViewModifier(color: color))
+struct TimerView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .environmentObject(LoginViewViewModel())
     }
 }

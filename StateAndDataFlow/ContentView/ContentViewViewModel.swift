@@ -5,11 +5,11 @@
 //  Created by Alexey Efimov on 06.03.2024.
 //
 
-import Observation
 import Foundation
+import Observation
 
-@Observable
-final class ContentViewViewModel {
+@Observable final class ContentViewViewModel {
+    
     var counter = 3
     var buttonTitle = "Start"
     
