@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject private var contentViewVM: ContentViewViewModel
+    
     @EnvironmentObject private var loginViewVM: LoginViewViewModel
+    
+    private let contentViewVM = ContentViewViewModel()
     
     var body: some View {
         VStack {
-            Text("Hi, \(loginViewVM.name)!")
+            Text("Hi, \(loginViewVM.user.name)!")
                 .padding(.top, 100)
                 .font(.largeTitle)
             Text(contentViewVM.counter.formatted())
@@ -22,31 +24,46 @@ struct ContentView: View {
             
             Spacer()
             
-            ButtonView(contentViewVM: contentViewVM)
-            
-            Spacer()
+            VStack {
+                Spacer()
+                
+                ButtonView(
+                    title: "Start",
+                    color: .red,
+                    action: contentViewVM.startTimer
+                )
+                
+                Spacer()
+                
+                ButtonView(
+                    title: "Log Out",
+                    color: .blue,
+                    action: loginViewVM.logout
+                )
+            }
         }
     }
 }
 
 #Preview {
     ContentView()
-        .environmentObject(ContentViewViewModel())
         .environmentObject(LoginViewViewModel())
 }
 
 struct ButtonView: View {
-    @ObservedObject var contentViewVM: ContentViewViewModel
+    let title: String
+    let color: Color
+    let action: () -> Void
     
     var body: some View {
-        Button(action: contentViewVM.startTimer) {
-            Text(contentViewVM.buttonTitle)
+        Button(action: action) {
+            Text(title)
                 .font(.title)
                 .fontWeight(.bold)
                 .foregroundStyle(.white)
         }
         .frame(width: 200, height: 60)
-        .background(.red)
+        .background(color)
         .clipShape(.rect(cornerRadius: 20))
         .overlay(
             RoundedRectangle(cornerRadius: 20)

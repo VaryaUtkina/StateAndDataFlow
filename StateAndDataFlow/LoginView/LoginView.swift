@@ -12,23 +12,37 @@ struct LoginView: View {
     
     var body: some View {
         VStack {
-            TextField("Enter your name", text: $loginViewVM.name)
-                .multilineTextAlignment(.center)
-            
-            Button(action: login) {
+            TextFieldView(loginViewVM: loginViewVM)
+            Button(action: loginViewVM.login) {
                 Label("OK", systemImage: "checkmark.circle")
+            }
+            .disabled(!loginViewVM.nameIsValid)
+        }
+        .padding()
+    }
+}
+
+struct TextFieldView: View {
+    @ObservedObject var loginViewVM: LoginViewViewModel
+    
+    var body: some View {
+        ZStack {
+            TextField("Type your name", text: $loginViewVM.user.name)
+                .multilineTextAlignment(.center)
+            HStack {
+                Spacer()
+                Text(loginViewVM.userNameCharCount)
+                    .font(.callout)
+                    .foregroundStyle(loginViewVM.nameIsValid ? .green : .red)
             }
         }
     }
     
-    private func login() {
-        if !loginViewVM.name.isEmpty {
-            loginViewVM.isLoggedIn.toggle()
-        }
-    }
 }
 
-#Preview {
-    LoginView()
-        .environmentObject(LoginViewViewModel())
+struct Register_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginView()
+            .environmentObject(LoginViewViewModel())
+    }
 }
